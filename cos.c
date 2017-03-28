@@ -1,6 +1,8 @@
 /**
  *  Approximate the function COS with series Taylor.
  *
+ *  Can be computed  as follows:
+ * 
  *  cos(x) = 1 - x^2/2! + x^4/4! - x^6/6! + ....(-1)^n*x^(2n)/(2n)!;
  *  
  */
@@ -8,46 +10,49 @@
 #include <stdio.h>
 #include <math.h>
 
-int fact(int n) {
+double fact(int n) {
 
-    if(n == 0) return 1;
+      if(n == 1 || n == 0) return 1;
 
-       else return n * fact(n - 1);
+       else return n * fact(n - 1);   
 }
 
-float myPow(int a, int b) {
+double myPow(double a, double b) {
 
-      int i, 
+      int i;
 
-          p = 1;
+      double p = 1;
 
       for(i = 1; i <= b; ++i) p *= a;
 
    return p;
 }
 
-double modul(double a, double b) {
+double myFabs(double a, double b) {
 
-       if(a > b) return a - b;
+      if(a > b) return a - b;
 
-             else return b - a;
+           else 
+
+                return b - a;
 }
 
-float myCos(float x) {
+
+double myCos(float x) {
 
     int i = 2;
 
-    float EPS = 0.0001;
+    double EPS = 0.000001;
 
-    float term1 = 1, 
+    double term1 = 1, 
 
-           term2 = term1 - (float) myPow(x, 2) * 1.0/ fact(2);         
+          term2 = term1 - (double) myPow(x, 2) * 1.0/ fact(2);         
 
-          while( modul(term1, term2) >= EPS ) {
+          while( myFabs(term1, term2) >= EPS ) {
 
                  term1 = term2;
     
-                 term2 += (float) pow(-1, i) * (double) pow(x, (2 * i)) * 1.0 / fact(2 * i);
+                 term2 += (double) pow(-1, i) * (double) myPow(x, 2 * i) * 1.0 / fact(2 * i);
               
                  i++;
           }        
@@ -58,15 +63,18 @@ float myCos(float x) {
 
 int main() {
 
-    float x;
+    double x;
 
+    //give me the number to compute sin
     printf("x=");
 
-    scanf("%f", &x);
+    //we need to use %lf format specifier to read a double 
+    scanf("%lf", &x);
 
-    printf("sin(%.2f) = %.10f\n", x , myCos( x ));
+    //we'll need to use  %lf format specifier to print out the results as well.
+    printf("cos(%.3lf) = %.5lf\n", x , myCos( x ));
 
-    printf("sin(%.2f) = %.10f", x , cos( x )); 
+    printf("cos(%.3lf) = %.5lf", x , cos( x )); 
 
  return 0;
 }
